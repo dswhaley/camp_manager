@@ -5,6 +5,9 @@ app_description = "This app keeps track of the information for all Camps by stor
 app_email = "danielwhaleygcc@gmail.com"
 app_license = "mit"
 
+
+
+fixtures = ["Custom Field", "Property Setter", "DocType"]
 # Apps
 # ------------------
 
@@ -132,17 +135,16 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
 
 # Scheduled Tasks
 # ---------------
-
+# doc_events = {
+#       "*": {
+#               "on_update": "method",
+#               "on_cancel": "method",
+#               "on_trash": "method"
+#       }
+# }
 # scheduler_events = {
 # 	"all": [
 # 		"camp_manager.tasks.all"
