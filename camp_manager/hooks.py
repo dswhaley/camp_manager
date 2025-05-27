@@ -7,7 +7,14 @@ app_license = "mit"
 
 
 
-fixtures = ["Custom Field", "Property Setter", "DocType"]
+fixtures = [
+    {
+        "dt": "DocType",
+        "filters": [
+            ["name", "in", ["Camp", "Camp Settings"]]
+        ]
+    }
+]
 # Apps
 # ------------------
 
