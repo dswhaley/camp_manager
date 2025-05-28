@@ -6,15 +6,35 @@ app_email = "danielwhaleygcc@gmail.com"
 app_license = "mit"
 
 
-
 fixtures = [
     {
         "dt": "DocType",
         "filters": [
             ["name", "in", ["Camp", "Camp Settings"]]
         ]
+    },
+    {
+        "dt": "Custom Field",
+        "filters": [["dt", "=", "Lead"]]
+    },
+    {
+        "dt": "Property Setter",
+        "filters": [["doc_type", "=", "Lead"]]
+    },
+    {
+        "dt": "Workflow",
+        "filters": [["document_type", "=", "Lead"]]
+    },
+    {
+        "dt": "Client Script",
+        "filters": [["dt", "=", "Lead"]]
+    },
+    {
+        "dt": "Print Format",
+        "filters": [["doc_type", "=", "Lead"]]
     }
 ]
+
 # Apps
 # ------------------
 
@@ -145,13 +165,11 @@ fixtures = [
 
 # Scheduled Tasks
 # ---------------
-# doc_events = {
-#       "*": {
-#               "on_update": "method",
-#               "on_cancel": "method",
-#               "on_trash": "method"
-#       }
-# }
+doc_events = {
+    "Lead": {
+        "on_update": "camp_manager.lead_hooks.handle_lead_conversion"
+    }
+}
 # scheduler_events = {
 # 	"all": [
 # 		"camp_manager.tasks.all"
