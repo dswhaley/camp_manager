@@ -4,10 +4,10 @@ def handle_lead_conversion(doc, method):
     # Check if the lead is marked as converted and hasn't already triggered automation
     if doc.custom_phase == "Signed" and not doc.custom_converted_to_customer:
         # If a Customer with this name doesn't exist, create one
-        if not frappe.db.exists("Customer", {"customer_name": doc.title}):
+        if not frappe.db.exists("Customer", {"customer_name": doc.company_name}):
             customer = frappe.get_doc({
                 "doctype": "Customer",
-                "customer_name": doc.title,
+                "customer_name": doc.company_name,
                 "lead_name": doc.name,  # Use doc.name to link back to the actual Lead
                 "customer_type": "Company"
             })
@@ -18,10 +18,10 @@ def handle_lead_conversion(doc, method):
         doc.db_update()
 
         # Create Camp if it doesn't exist
-        if not frappe.db.exists("Camp", {"camp_name": doc.title}):
+        if not frappe.db.exists("Camp", {"camp_name": doc.company_name}):
             camp = frappe.get_doc({
                 "doctype": "Camp",
-                "camp_name": doc.title,
+                "camp_name": doc.company_name,
                 "contact_name": doc.custom_contact_name,
                 "email": doc.email_id,
                 "phone": doc.phone
