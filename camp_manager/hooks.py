@@ -32,8 +32,30 @@ fixtures = [
     {
         "dt": "Print Format",
         "filters": [["doc_type", "=", "Lead"]]
+    },
+        {
+        "doctype": "Custom Field",
+        "filters": [["dt", "=", "Customer"]]
+    },
+    {
+        "doctype": "Property Setter",
+        "filters": [["doc_type", "=", "Customer"]]
     }
 ]
+
+
+doc_events = {
+    "Lead": {
+        "on_update": "camp_manager.lead_hooks.handle_lead_conversion"
+    },
+    "Camp": {
+        "on_update": "camp_manager.utils.update_customer_billing_address"
+    },
+    "Customer": {
+        "on_update": "camp_manager.utils.set_customer_billing_from_camp"
+    }
+}
+
 
 # Apps
 # ------------------
@@ -165,11 +187,7 @@ fixtures = [
 
 # Scheduled Tasks
 # ---------------
-doc_events = {
-    "Lead": {
-        "on_update": "camp_manager.lead_hooks.handle_lead_conversion"
-    }
-}
+
 # scheduler_events = {
 # 	"all": [
 # 		"camp_manager.tasks.all"
