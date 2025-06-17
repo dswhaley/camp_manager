@@ -40,6 +40,14 @@ fixtures = [
     {
         "doctype": "Property Setter",
         "filters": [["doc_type", "=", "Customer"]]
+    },
+        {
+        "doctype": "Module Def",
+        "filters": [["module_name", "=", "Camp"]]
+    },
+        {
+        "doctype": "Workspace",
+        "filters": [["name", "=", "Camp Info"]]
     }
 ]
 
