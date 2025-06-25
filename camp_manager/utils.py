@@ -25,8 +25,7 @@ def update_customer_billing_address(doc, method):
 
         # Only update if the current address is blank or different
         if cust.custom_billing_address != new_billing_address:
-            cust.custom_billing_address = new_billing_address
-            cust.save(ignore_permissions=True)
+            frappe.db.set_value("Customer", doc.name, "custom_billing_address", new_billing_address)
 
 
 def set_customer_billing_from_camp(doc, method):
@@ -49,5 +48,4 @@ def set_customer_billing_from_camp(doc, method):
 
     # 🛡️ Only update if different
     if doc.custom_billing_address != new_billing_address:
-        doc.custom_billing_address = new_billing_address
-        doc.save(ignore_permissions=True)
+        frappe.db.set_value("Customer", doc.name, "custom_billing_address", new_billing_address)
