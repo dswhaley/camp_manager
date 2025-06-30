@@ -51,12 +51,10 @@ fixtures = [
     }
 ]
 
-app_include_js = "/assets/camp_manager/js/page_refresh.js"
-
 
 doc_events = {
     "Lead": {
-        "on_update": "camp_manager.lead_hooks.handle_lead_conversion"
+        "on_update": "camp_manager.lead_hooks.enqueue_lead_conversion"
     },
     "Camp": {
         "before_save": "camp_manager.utils.camp_hooks"
