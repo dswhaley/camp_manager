@@ -51,16 +51,18 @@ fixtures = [
     }
 ]
 
+app_include_js = "/assets/camp_manager/js/page_refresh.js"
+
 
 doc_events = {
     "Lead": {
         "on_update": "camp_manager.lead_hooks.handle_lead_conversion"
     },
     "Camp": {
-        "on_update": "camp_manager.utils.camp_hooks"
+        "before_save": "camp_manager.utils.camp_hooks"
     },
     "Customer": {
-        "on_update": "camp_manager.utils.set_customer_billing_from_camp"
+        "before_save": "camp_manager.utils.set_customer_billing_from_camp"
     }
 }
 
