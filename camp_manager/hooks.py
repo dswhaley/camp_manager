@@ -57,7 +57,7 @@ doc_events = {
         "on_update": "camp_manager.lead_hooks.handle_lead_conversion"
     },
     "Camp": {
-        "on_update": "camp_manager.utils.update_customer_billing_address"
+        "on_update": "camp_manager.utils.camp_hooks"
     },
     "Customer": {
         "on_update": "camp_manager.utils.set_customer_billing_from_camp"
