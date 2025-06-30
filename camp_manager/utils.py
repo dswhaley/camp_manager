@@ -1,13 +1,38 @@
 import frappe
+from camp_manager.reload import trigger_browser_reload
+
 def camp_hooks(doc, method):
     update_customer_billing_address(doc, method)
     update_link_status(doc, method)
+    create_customer(doc, method)
 
 def update_link_status(doc, method):
     settingsStatus = "Unlinked"
     if doc.link_to_camp_settings:
         settingsStatus = "Linked"
     frappe.db.set_value("Camp", doc.name, "settings_status", settingsStatus)
+
+def create_customer(doc, method):
+    try:
+        # Ensure original doc exists so we can compare changes
+        if not hasattr(doc, "_original"):
+
+            doc._original = frappe.get_doc(doc.doctype, doc.name)
+
+        # Only run this when link status is changed from Unlinked -> Linked
+        if not doc._original.link_to_camp_settings and doc.link_to_camp_settings:
+            # Avoid duplicate Customer creation
+            if not frappe.db.exists("Customer", {"custom_camp_link": doc.name}):
+                customer = frappe.get_doc({
+                    "doctype": "Customer",
+                    "customer_name": doc.name,
+                    "customer_type": "Company",
+                    "custom_camp_link": doc.name
+                })
+                customer.insert()
+                frappe.db.commit()  # Only needed if you're outside request lifecycle
+    except Exception as e:
+        frappe.log_error(f"❌ Failed to create a customer for Camp {doc.name}: {str(e)}", "create_customer error")
 
 
 def update_customer_billing_address(doc, method):
