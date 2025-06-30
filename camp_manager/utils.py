@@ -1,4 +1,14 @@
 import frappe
+def camp_hooks(doc, method):
+    update_customer_billing_address(doc, method)
+    update_link_status(doc, method)
+
+def update_link_status(doc, method):
+    settingsStatus = "Unlinked"
+    if doc.link_to_camp_settings:
+        settingsStatus = "Linked"
+    frappe.db.set_value("Camp", doc.name, "settings_status", settingsStatus)
+
 
 def update_customer_billing_address(doc, method):
     """When a Camp is edited, update Customer billing address only if necessary."""
