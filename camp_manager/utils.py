@@ -1,5 +1,4 @@
 import frappe
-from camp_manager.reload import trigger_browser_reload
 
 def camp_hooks(doc, method):
     update_customer_billing_address(doc, method)
