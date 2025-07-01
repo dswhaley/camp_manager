@@ -10,7 +10,7 @@ fixtures = [
     {
         "dt": "DocType",
         "filters": [
-            ["name", "in", ["Camp", "Camp Settings"]]
+            ["name", "in", ["Camp", "Camp Settings", "Onboarding"]]
         ]
     },
     {
@@ -61,6 +61,9 @@ doc_events = {
     },
     "Customer": {
         "before_save": "camp_manager.utils.set_customer_billing_from_camp"
+    },
+     "Onboarding":{
+         "before_save": "camp_manager.onboarding_hooks.manage_onboarding"
     }
 }
 
