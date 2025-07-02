@@ -58,7 +58,7 @@ def update_camp(doc):
                 doc.first_day_of_camp_provided = 1
 
             if original.custom_discount != doc.custom_discount and doc.custom_discount:
-                camp.discount = doc.custom_discount
+                camp.association = doc.custom_discount
                 doc.custom_set_discount = 1
             # Shipping Address
             if original.shipping_address_1 != doc.shipping_address_1:
