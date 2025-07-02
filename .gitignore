@@ -36,6 +36,8 @@ venv.bak/
 node_modules/
 jspm_packages/
 
+#Files to Ignore
+camp_manager/discounts.json
 # IDEs and editors
 .vscode/
 .vs/
