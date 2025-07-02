@@ -1,8 +1,11 @@
 import frappe
+import json
+import os
 
 def camp_hooks(doc, method):
     update_customer_billing_address(doc, method)
     update_link_status(doc, method)
+    set_discount(doc, method)
     create_customer(doc, method)
 
 def update_link_status(doc, method):
@@ -32,6 +35,30 @@ def create_customer(doc, method):
                 frappe.db.commit()  # Only needed if you're outside request lifecycle
     except Exception as e:
         frappe.log_error(f"❌ Failed to create a customer for Camp {doc.name}: {str(e)}", "create_customer error")
+
+def set_discount(doc, method):
+    try:
+        if not hasattr(doc, "_original"):
+            doc._original = frappe.get_doc(doc.doctype, doc.name)
+        original = doc._original  # Corrected this
+
+        if (original.association != doc.association and doc.association):
+            file_path = os.path.join(os.path.dirname(__file__), "discounts.json")
+
+            with open(file_path, "r") as file:
+                association_discounts = json.load(file)
+
+            if doc.association in association_discounts:
+                doc.association_discount = association_discounts[doc.association]
+
+    except FileNotFoundError:
+        frappe.log_error("Could not find discounts.json", "Discount Error")
+
+    except json.JSONDecodeError:
+        frappe.log_error("Invalid JSON format in discounts.json", "Discount Error")
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Unexpected error in set_discount")
 
 
 def update_customer_billing_address(doc, method):
