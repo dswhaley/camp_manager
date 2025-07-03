@@ -10,7 +10,7 @@ fixtures = [
     {
         "dt": "DocType",
         "filters": [
-            ["name", "in", ["Camp", "Camp Settings", "Onboarding"]]
+            ["name", "in", ["Camp", "Camp Settings", "Onboarding", "Other Organization"]]
         ]
     },
     {
@@ -47,7 +47,7 @@ fixtures = [
     },
         {
         "doctype": "Workspace",
-        "filters": [["name", "=", "Camp Info"]]
+        "filters": [["name", "=", "Organization Info"]]
     }
 ]
 
