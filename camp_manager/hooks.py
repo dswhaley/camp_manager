@@ -57,10 +57,13 @@ doc_events = {
         "on_update": "camp_manager.lead_hooks.enqueue_lead_conversion"
     },
     "Camp": {
-        "before_save": "camp_manager.utils.camp_hooks"
+        "before_save": "camp_manager.utils.organization_hooks"
+    },
+    "Other Organization": {
+        "before_save": "camp_manager.utils.organization_hooks"
     },
     "Customer": {
-        "before_save": "camp_manager.utils.set_customer_billing_from_camp"
+        "before_save": "camp_manager.utils.set_customer_billing_from_organization"
     },
      "Onboarding":{
          "before_save": "camp_manager.onboarding_hooks.manage_onboarding"
