@@ -9,7 +9,7 @@ fixtures = [
     {
         "dt": "DocType",
         "filters": [
-            ["name", "in", ["Camp", "Camp Settings", "Onboarding", "Other Organization"]]
+            ["name", "in", ["Camp", "Camp Settings", "Onboarding", "Other Organization", "Google Form Sync Settings"]]
         ]
     },
     {
