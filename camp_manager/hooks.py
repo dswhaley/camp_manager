@@ -4,8 +4,7 @@ app_publisher = "Funfangle"
 app_description = "This app keeps track of the information for all Camps by storing them in Camp and Camp Settings Doctypes. It also creates a Camp and Camp Settings entry whenever a ERPnext customer is created"
 app_email = "danielwhaleygcc@gmail.com"
 app_license = "mit"
-
-
+from camp_manager.api import create_entry
 fixtures = [
     {
         "dt": "DocType",
@@ -51,6 +50,10 @@ fixtures = [
     }
 ]
 
+override_whitelisted_methods = {
+    "camp_manager.api.create_entry.create_from_google_form": "camp_manager.api.create_entry.create_from_google_form"
+}
+
 
 doc_events = {
     "Lead": {
@@ -69,6 +72,8 @@ doc_events = {
          "before_save": "camp_manager.onboarding_hooks.manage_onboarding"
     }
 }
+
+
 
 
 # Apps
