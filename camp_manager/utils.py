@@ -41,11 +41,8 @@ def update_customer_info(doc, method):
 
 
 def update_link_status(doc, method):
-    settingsStatus = "Unlinked"
     if doc.link_to_camp_settings:
-        settingsStatus = "Linked"
-    frappe.db.set_value("Camp", doc.name, "settings_status", settingsStatus)
-
+        doc.settings_status = "Linked"
 def create_customer(doc, method):
     try:
         # Ensure original doc exists so we can compare changes
