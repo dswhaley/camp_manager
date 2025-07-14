@@ -60,9 +60,11 @@ doc_events = {
         "on_update": "camp_manager.lead_hooks.enqueue_lead_conversion"
     },
     "Camp": {
+        "on_update": "camp_manager.organization_hooks.organization_creation",
         "before_save": "camp_manager.utils.organization_hooks"
     },
     "Other Organization": {
+        "on_update": "camp_manager.organization_hooks.organization_creation",
         "before_save": "camp_manager.utils.organization_hooks"
     },
     "Customer": {
