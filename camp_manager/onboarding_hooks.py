@@ -2,7 +2,7 @@ import frappe
 
 def manage_onboarding(doc, method):
     update_phase(doc)
-    if(doc.organization_type == "Camp"):
+    if doc.organization_type == "Camp":
         update_camp(doc)
     else:
         update_organization(doc)
@@ -34,12 +34,15 @@ def update_phase(doc):
 
 def update_camp(doc):
     try:
+        if doc.is_new():
+            return
         if not hasattr(doc, "_original"):
             doc._original = frappe.get_doc(doc.doctype, doc.name)
 
         original = doc._original
-        try:                
-            camp = frappe.get_doc("Camp", doc.title)
+        try:
+            if frappe.db.exists("Camp", {"name": doc.title}):            
+                camp = frappe.get_doc("Camp", doc.title)
 
             # Registration Method
             if camp.registration_software != doc.registration_method and doc.registration_method:
@@ -62,6 +65,7 @@ def update_camp(doc):
             if camp.association != doc.custom_discount and doc.custom_discount:
                 camp.association = doc.custom_discount
                 doc.custom_set_discount = 1
+
             # Shipping Address
             if camp.shipping_address_1 != doc.shipping_address_1:
                 camp.shipping_address_1 = doc.shipping_address_1
@@ -109,17 +113,20 @@ def update_camp(doc):
 
     except Exception as e:
         frappe.msgprint(f"❌ Failed to update the Camp information for {doc.name}: {str(e)}")
-        frappe.log_error(f"❌ Error updating camp in Onboarding for {doc.name}: {str(e)}", "manage_onboarding error")
-
+        frappe.log_error(f"❌ Error updating Camp in Onboarding for {doc.name}: {str(e)}", "manage_onboarding error")
 
 def update_organization(doc):
     try:
+        if doc.is_new():
+            return
         if not hasattr(doc, "_original"):
+            frappe.msgprint("Tried to get the original")
             doc._original = frappe.get_doc(doc.doctype, doc.name)
 
         original = doc._original
-        try:                
-            other_organization = frappe.get_doc("Other Organization", doc.title)
+        try:
+            if frappe.db.exists("Other Organization", {"name": doc.title}):  # Corrected DocType
+                other_organization = frappe.get_doc("Other Organization", doc.title)
 
             # Tax Info
             if original.exempt_status != doc.exempt_status:
@@ -132,6 +139,7 @@ def update_organization(doc):
             if original.custom_discount != doc.custom_discount and doc.custom_discount:
                 other_organization.association = doc.custom_discount
                 doc.custom_set_discount = 1
+
             # Shipping Address
             if original.shipping_address_1 != doc.shipping_address_1:
                 other_organization.shipping_address_1 = doc.shipping_address_1
@@ -164,7 +172,6 @@ def update_organization(doc):
                 doc.gathered_poc_information = 1
 
             # Organization ID
-            # Organization ID
             if original.organization_order_id != doc.organization_order_id and doc.organization_order_id:
                 other_organization.organization_order_id = doc.organization_order_id
                 doc.assigned_organization_order_id = 1
@@ -176,8 +183,8 @@ def update_organization(doc):
             other_organization.save(ignore_permissions=True)
 
         except frappe.DoesNotExistError:
-            frappe.throw(f"Linked Camp '{doc.title}' not found.")
+            frappe.throw(f"Linked Other Organization '{doc.title}' not found.")
 
     except Exception as e:
-        frappe.msgprint(f"❌ Failed to update the Camp information for {doc.name}")
-        frappe.log_error(f"❌ Error updating camp in Onboarding for {doc.name}: {str(e)}", "manage_onboarding error")
+        frappe.msgprint(f"❌ Failed to update the Other Organization information for {doc.name}")
+        frappe.log_error(f"❌ Error updating Other Organization in Onboarding for {doc.name}: {str(e)}", "manage_onboarding error")
