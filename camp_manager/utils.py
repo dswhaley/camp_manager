@@ -6,10 +6,10 @@ def organization_hooks(doc, method):
     set_discount(doc, method)
     if doc.doctype == "Camp":
         update_link_status(doc, method)
-    create_customer(doc, method)
     update_customer_info(doc, method)
 
 def update_customer_info(doc, method):
+    print("update_customer_info running")
     customers = []
     if doc.doctype == "Camp":
         customers = frappe.get_all(
@@ -26,7 +26,7 @@ def update_customer_info(doc, method):
     
     if not customers:
         return
-
+    print("There were customers")
     for customer in customers:
         cust = frappe.get_doc("Customer", customer.name)
 
@@ -43,46 +43,16 @@ def update_customer_info(doc, method):
 def update_link_status(doc, method):
     if doc.link_to_camp_settings:
         doc.settings_status = "Linked"
-def create_customer(doc, method):
-    try:
-        # Ensure original doc exists so we can compare changes
-        if not hasattr(doc, "_original"):
-
-            doc._original = frappe.get_doc(doc.doctype, doc.name)
-
-        
-        #Check if Camp or Organization
-        if doc.doctype == "Camp":
-            # Only run this when link status is changed from Unlinked -> Linked
-            if not doc._original.link_to_camp_settings and doc.link_to_camp_settings:
-                # Avoid duplicate Customer creation
-                if not frappe.db.exists("Customer", {"custom_camp_link": doc.name}):
-                    customer = frappe.get_doc({
-                        "doctype": "Customer",
-                        "customer_name": doc.name,
-                        "customer_type": "Company",
-                        "custom_camp_link": doc.name
-                    })
-                    customer.insert()
-                    frappe.db.commit()  # Only needed if you're outside request lifecycle
-        elif doc.doctype == "Other Organization":
-            if not frappe.db.exists("Customer", {"custom_other_organization_link": doc.name}):
-                    customer = frappe.get_doc({
-                        "doctype": "Customer",
-                        "customer_name": doc.name,
-                        "customer_type": "Company",
-                        "custom_other_organization_link": doc.name
-                    })
-            customer.insert()
-            frappe.db.commit()  # Only needed if you're outside request lifecycle
-    except Exception as e:
-        frappe.log_error(f"❌ Failed to create a customer for Camp {doc.name}: {str(e)}", "create_customer error")
 
 def set_discount(doc, method):
     try:
+        if doc.is_new(): 
+            return
+
         if not hasattr(doc, "_original"):
+            print("trying to get the origional")
             doc._original = frappe.get_doc(doc.doctype, doc.name)
-        original = doc._original
+            original = doc._original
 
         if (original.association != doc.association and doc.association):
             file_path = os.path.join(os.path.dirname(__file__), "discounts.json")
@@ -125,9 +95,9 @@ def set_customer_billing_from_organization(doc, method):
         return
 
     try:
-        if(doc.doctype == "Camp"):
+        if(doc.doctype == "Camp" and frappe.db.exists("Camp", {"name": doc.custom_camp_link})):
             organization = frappe.get_doc("Camp", doc.custom_camp_link)
-        elif doc.doctype == "Other Organization":
+        elif doc.doctype == "Other Organization" and frappe.db.exists("Other Organization", {"name": doc.custom_other_organization_link}):
             organization = frappe.get_doc("Other Organization", doc.custom_other_organization_link)
         else:
             return
@@ -137,7 +107,7 @@ def set_customer_billing_from_organization(doc, method):
     parts = []
     if organization.billing_address_1:
         parts = [organization.billing_address_1, organization.billing_address_2, organization.billing_address_3]
-    elif camp.shipping_address_1:
+    elif organization.shipping_address_1:
         parts = [organization.shipping_address_1, organization.shipping_address_2, organization.shipping_address_3]
 
     new_billing_address = ', '.join(filter(None, parts)) if any(parts) else ''
