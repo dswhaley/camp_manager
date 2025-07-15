@@ -120,7 +120,6 @@ def update_organization(doc):
         if doc.is_new():
             return
         if not hasattr(doc, "_original"):
-            frappe.msgprint("Tried to get the original")
             doc._original = frappe.get_doc(doc.doctype, doc.name)
 
         original = doc._original
