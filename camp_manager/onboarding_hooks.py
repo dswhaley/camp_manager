@@ -1,4 +1,7 @@
 import frappe
+import json
+import os
+import time
 
 def manage_onboarding(doc, method):
     update_phase(doc)
@@ -73,6 +76,7 @@ def update_camp(doc):
                 camp.shipping_address_2 = doc.shipping_address_2
             if camp.shipping_address_3 != doc.shipping_address_3:
                 camp.shipping_address_3 = doc.shipping_address_3
+                update_currency(doc, camp)
 
             # Billing Address
             if camp.billing_address_1 != doc.billing_address_1:
@@ -108,13 +112,25 @@ def update_camp(doc):
 
             camp.save(ignore_permissions=True)
 
+            if doc.shipping_address_1 and doc.shipping_address_2 and doc.exempt_status != "Pending" and doc.poc_email and doc.poc_phone_number:
+                if (doc.exempt_status == "Exempt" and doc.tax_exempt_id) or doc.exempt_status == "Taxed":
+                    cust = frappe.get_doc("Customer", doc.name)
+                    print("About to enqueue")
+                    #cust.custom_create_customer_in_qbo = 1
+                    frappe.enqueue("camp_manager.utils.sync_customer", queue='default', customer=cust.name)
+
+
         except frappe.DoesNotExistError:
             frappe.throw(f"Linked Camp '{doc.title}' not found.")
 
     except Exception as e:
         frappe.msgprint(f"❌ Failed to update the Camp information for {doc.name}: {str(e)}")
         frappe.log_error(f"❌ Error updating Camp in Onboarding for {doc.name}: {str(e)}", "manage_onboarding error")
-
+def sync_customer(customer):
+    print("Running")
+    cust = frappe.get_doc("Customer", customer)
+    cust.custom_create_customer_in_qbo
+    cust.save(ignore_permissions=True)
 def update_organization(doc):
     try:
         if doc.is_new():
@@ -146,6 +162,7 @@ def update_organization(doc):
                 other_organization.shipping_address_2 = doc.shipping_address_2
             if original.shipping_address_3 != doc.shipping_address_3:
                 other_organization.shipping_address_3 = doc.shipping_address_3
+                update_currency(doc, other_organization)
 
             # Billing Address
             if original.billing_address_1 != doc.billing_address_1:
@@ -155,6 +172,7 @@ def update_organization(doc):
             if original.billing_address_3 != doc.billing_address_3:
                 other_organization.billing_address_3 = doc.billing_address_3
 
+            
             # Collected Address Flag
             if ((doc.shipping_address_1 and doc.shipping_address_2) and
                 (doc.billing_address_1 and doc.billing_address_2 or doc.billing_address_same)):
@@ -181,9 +199,29 @@ def update_organization(doc):
 
             other_organization.save(ignore_permissions=True)
 
+            if doc.shipping_address_1 and doc.shipping_address_2 and doc.exempt_status != "Pending" and doc.poc_email and doc.poc_phone_number:
+                if (doc.exempt_status == "Exempt" and doc.tax_exempt_id) or doc.exempt_status == "Taxed":
+                    cust = frappe.get_doc("Customer", doc.name)
+                    print("About to enqueue")
+                    #cust.custom_create_customer_in_qbo = 1
+                    frappe.enqueue("camp_manager.utils.sync_customer", queue='default', customer=cust.name)
+
         except frappe.DoesNotExistError:
             frappe.throw(f"Linked Other Organization '{doc.title}' not found.")
 
     except Exception as e:
         frappe.msgprint(f"❌ Failed to update the Other Organization information for {doc.name}")
         frappe.log_error(f"❌ Error updating Other Organization in Onboarding for {doc.name}: {str(e)}", "manage_onboarding error")
+
+def update_currency(doc, org):
+    print("***************************WE GOT HERE")
+    file_path = os.path.join(os.path.dirname(__file__), "country_currency_map.json")
+    with open(file_path, "r") as file:
+        country_currency = json.load(file)
+        country = doc.shipping_address_3.lower()
+        currency = country_currency.get(country.lower())
+        print(f"********************************Currency is: {currency}")
+        if currency:
+            org.currency = currency
+        else:
+            org.currency = "USD"        
