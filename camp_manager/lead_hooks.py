@@ -19,6 +19,7 @@ def convert_lead_to_camp_and_customer(doc):
             camp.phone = doc.phone
             camp.lead_link = doc.name
             camp.save(ignore_permissions=True)
+            frappe.msgprint(f"Camp {camp.organization_name} created")
     else:
         if not frappe.db.exists("Other Organization", {"organization_name": doc.company_name}):
             frappe.logger().info(f"Creating Camp for {doc.company_name}")
@@ -29,4 +30,5 @@ def convert_lead_to_camp_and_customer(doc):
             other_org.phone = doc.phone
             other_org.lead_link = doc.name
             other_org.save(ignore_permissions=True)
+            frappe.msgprint(f"Other Organization: {other_org.organization_name} created")
     frappe.db.set_value("Lead", doc.name, "custom_converted_to_customer", 1)
