@@ -43,10 +43,8 @@ def update_customer_info(doc, method):
         if cust.default_currency != doc.currency:
             currency = frappe.get_doc("Currency", doc.currency)
             if not currency.enabled:
-                print(f"Currency: {currency.enabled}")
                 currency.enabled = 1
                 currency.save(ignore_permissions = True)
-                print(f"Currency: {currency.enabled}")
 
             first_company = frappe.get_all("Company", fields=["name"], limit=1)
             company_name = first_company[0]["name"] if first_company else None
