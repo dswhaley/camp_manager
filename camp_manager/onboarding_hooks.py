@@ -101,6 +101,18 @@ def update_camp(doc):
             if doc.poc_name and doc.poc_email and doc.poc_phone_number:
                 doc.gathered_poc_information = 1
 
+            if camp.funfangle_username != doc.funfangle_username:
+                camp.funfangle_username = doc.funfangle_username
+            if camp.funfangle_password != doc.funfangle_password:
+                camp.funfangle_password = doc.funfangle_password
+            if doc.funfangle_password and doc.funfangle_username:
+                doc.account_setup = 1
+            
+
+            if camp.link_to_parent_portal != doc.link_to_parent_portal:
+                camp.link_to_parent_portal = doc.link_to_parent_portal
+                doc.set_up_parent_portal = 1
+
             # Organization ID
             if camp.organization_order_id != doc.organization_order_id and doc.organization_order_id:
                 camp.organization_order_id = doc.organization_order_id
@@ -197,6 +209,17 @@ def update_organization(doc):
                 other_organization.organization_funfangle_id = doc.organization_funfangle_id
                 doc.assigned_organization_funfangle_id = 1
 
+            if other_organization.funfangle_username != doc.funfangle_username:
+                other_organization.funfangle_username = doc.funfangle_username
+            if other_organization.funfangle_password != doc.funfangle_password:
+                other_organization.funfangle_password = doc.funfangle_password
+            if doc.funfangle_password and doc.funfangle_username:
+                doc.account_setup = 1
+            
+
+            if other_organization.link_to_parent_portal != doc.link_to_parent_portal:
+                other_organization.link_to_parent_portal = doc.link_to_parent_portal
+                doc.set_up_parent_portal = 1
             other_organization.save(ignore_permissions=True)
 
             if doc.shipping_address_1 and doc.shipping_address_2 and doc.exempt_status != "Pending" and doc.poc_email and doc.poc_phone_number:
