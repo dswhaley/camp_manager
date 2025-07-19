@@ -45,9 +45,11 @@ fixtures = [
         "filters": [["module_name", "=", "Camp"]]
     },
         {
-        "doctype": "Workspace",
-        "filters": [["name", "=", "Organization Info"]]
-    }
+            "doctype": "Workspace",
+            "filters": [
+                ["name", "in", ["Organization Info", "Home Page"]]
+            ]
+        }
 ]
 
 override_whitelisted_methods = {
