@@ -97,7 +97,7 @@ def update_camp(doc):
             # POC Info
             if camp.contact_name != doc.poc_name and doc.poc_name:
                 camp.contact_name = doc.poc_name
-            if camp.email != doc.poc_email and doc.email:
+            if camp.email != doc.poc_email and doc.poc_email:
                 camp.email = doc.poc_email
             if camp.phone != doc.poc_phone_number and doc.poc_phone_number:
                 camp.phone = doc.poc_phone_number
@@ -130,12 +130,12 @@ def update_camp(doc):
 
             camp.save(ignore_permissions=True)
 
-            if doc.shipping_address_1 and doc.shipping_address_2 and doc.exempt_status != "Pending" and doc.poc_email and doc.poc_phone_number:
-                if (doc.exempt_status == "Exempt" and doc.tax_exempt_id) or doc.exempt_status == "Taxed":
-                    cust = frappe.get_doc("Customer", doc.name)
-                    print("About to enqueue")
-                    #cust.custom_create_customer_in_qbo = 1
-                    frappe.enqueue("camp_manager.utils.sync_customer", queue='default', customer=cust.name)
+            # if doc.shipping_address_1 and doc.shipping_address_2 and doc.exempt_status != "Pending" and doc.poc_email and doc.poc_phone_number:
+            #     if (doc.exempt_status == "Exempt" and doc.tax_exempt_id) or doc.exempt_status == "Taxed":
+            #         cust = frappe.get_doc("Customer", doc.name)
+            #         print("About to enqueue")
+            #         #cust.custom_create_customer_in_qbo = 1
+            #         frappe.enqueue("camp_manager.utils.sync_customer", queue='default', customer=cust.name)
 
 
         except frappe.DoesNotExistError:
@@ -232,12 +232,12 @@ def update_organization(doc):
                 doc.set_up_parent_portal = 1
             other_organization.save(ignore_permissions=True)
 
-            if doc.shipping_address_1 and doc.shipping_address_2 and doc.exempt_status != "Pending" and doc.poc_email and doc.poc_phone_number:
-                if (doc.exempt_status == "Exempt" and doc.tax_exempt_id) or doc.exempt_status == "Taxed":
-                    cust = frappe.get_doc("Customer", doc.name)
-                    print("About to enqueue")
-                    #cust.custom_create_customer_in_qbo = 1
-                    frappe.enqueue("camp_manager.utils.sync_customer", queue='default', customer=cust.name)
+            # if doc.shipping_address_1 and doc.shipping_address_2 and doc.exempt_status != "Pending" and doc.poc_email and doc.poc_phone_number:
+            #     if (doc.exempt_status == "Exempt" and doc.tax_exempt_id) or doc.exempt_status == "Taxed":
+            #         cust = frappe.get_doc("Customer", doc.name)
+            #         print("About to enqueue")
+            #         #cust.custom_create_customer_in_qbo = 1
+            #         frappe.enqueue("camp_manager.utils.sync_customer", queue='default', customer=cust.name)
 
         except frappe.DoesNotExistError:
             frappe.throw(f"Linked Other Organization '{doc.title}' not found.")
