@@ -27,20 +27,17 @@ def check_currancy(doc):
         print(f"Didn't update currancy due to: {str(e)}")
 
 def update_currency(doc):
-    print("***************************WE GOT HERE")
     file_path = os.path.join(os.path.dirname(__file__), "country_currency_map.json")
     with open(file_path, "r") as file:
         country_currency = json.load(file)
         country = doc.country_shipping_address.lower()
         currency = country_currency.get(country.lower())
-        print(f"********************************Currency is: {currency}")
         if currency:
             doc.currency = currency
         else:
             doc.currency = "USD"
 
 def update_customer_info(doc, method):
-    print(f"doc is of doctype: {doc.doctype}")
     customers = []
     if doc.doctype == "Camp":
         customers = frappe.get_all(
@@ -80,7 +77,6 @@ def update_customer_info(doc, method):
             company_name = first_company[0]["name"] if first_company else None
             
             frappe.db.set_value("Customer", cust.name, "default_currency", doc.currency)
-            frappe.db.commit()
             ensure_child_account(f"Debtors {doc.currency}", doc.currency)
 
             
@@ -135,7 +131,7 @@ def ensure_child_account(account_name: str, currency: str):
 
 
     account.insert(ignore_permissions=True)
-    frappe.db.commit()
+    #frappe.db.commit()
 
 
     print(f"✅ Created new child account '{account.name}' under '{parent_account}'")
@@ -152,36 +148,38 @@ def update_link_status(doc, method):
 
 def set_discount(doc, method):
     try:
-        if doc.is_new():
-            return
+        # if doc.is_new():
+        #     return
 
-
+        original = None
         if not hasattr(doc, "_original"):
             doc._original = frappe.get_doc(doc.doctype, doc.name)
             original = doc._original
 
-
-        if (original.association != doc.association and doc.association):
+        if original == None or (original.association != doc.association and doc.association):
             file_path = os.path.join(os.path.dirname(__file__), "discounts.json")
 
 
             with open(file_path, "r") as file:
                 association_discounts = json.load(file)
 
+                if doc.association in association_discounts:
+                    doc.association_discount = association_discounts[doc.association]
 
-            if doc.association in association_discounts:
-                doc.association_discount = association_discounts[doc.association]
 
 
-    except FileNotFoundError:
+    except FileNotFoundError as fne:
+        print(f"Failed due to FileNotFoundError: {str(fne)}")
         frappe.log_error("Could not find discounts.json", "Discount Error")
 
 
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as jsnde:
+        print(f"Failed due to json.JSONDecodeError: {str(jsnde)}")
         frappe.log_error("Invalid JSON format in discounts.json", "Discount Error")
 
 
     except Exception as e:
+        print(f"Failed due to: {str(e)}")
         frappe.log_error(frappe.get_traceback(), "Unexpected error in set_discount")
 
 
@@ -197,7 +195,6 @@ def update_customer_billing_address(doc, cust):
 
     
     for i in range(0, len(parts)):
-        print(f"Value {i} in parts is: {parts[i]}")
     if len(parts) == 6:
         cust.custom_street_address_line_1 = parts[0]
         cust.custom_street_address_line_2 = parts[1]
