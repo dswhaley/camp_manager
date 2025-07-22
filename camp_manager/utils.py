@@ -4,13 +4,43 @@ import os
 
 
 def organization_hooks(doc, method):
+    check_currancy(doc)
     set_discount(doc, method)
     if doc.doctype == "Camp":
         update_link_status(doc, method)
     update_customer_info(doc, method)
 
+def check_currancy(doc):
+    try:
+        if doc.is_new():
+            update_currency(doc)
+            return
+
+        
+        if not hasattr(doc, "_original"):
+            doc._original = frappe.get_doc(doc.doctype, doc.name)
+            original = doc._original
+
+        if doc.country_shipping_address != original.country_shipping_address:
+            update_currency(doc)
+    except Exception as e:
+        print(f"Didn't update currancy due to: {str(e)}")
+
+def update_currency(doc):
+    print("***************************WE GOT HERE")
+    file_path = os.path.join(os.path.dirname(__file__), "country_currency_map.json")
+    with open(file_path, "r") as file:
+        country_currency = json.load(file)
+        country = doc.country_shipping_address.lower()
+        currency = country_currency.get(country.lower())
+        print(f"********************************Currency is: {currency}")
+        if currency:
+            doc.currency = currency
+        else:
+            doc.currency = "USD"
 
 def update_customer_info(doc, method):
+    print(f"doc is of doctype: {doc.doctype}")
     customers = []
     if doc.doctype == "Camp":
         customers = frappe.get_all(
@@ -50,14 +80,12 @@ def update_customer_info(doc, method):
             company_name = first_company[0]["name"] if first_company else None
             
             frappe.db.set_value("Customer", cust.name, "default_currency", doc.currency)
+            frappe.db.commit()
             ensure_child_account(f"Debtors {doc.currency}", doc.currency)
 
             
             frappe.enqueue("camp_manager.utils.set_customer_account", queue='default', timeout=300, now=False, is_async=True, company=company_name, account_name=f"Debtors {doc.currency} - {company_name[0]}", doc=doc, cust=cust)
-def sync_customer(customer):
-    cust = frappe.get_doc("Customer", customer)
-    cust.custom_create_customer_in_qbo = 1
-    cust.save(ignore_permissions=True)
+
 
 def set_customer_account(company, account_name, doc, cust):
     cust.append("accounts", {
@@ -162,55 +190,28 @@ def set_discount(doc, method):
 def update_customer_billing_address(doc, cust):
     # Prepare the new address
     parts = []
-    if doc.billing_address_1:
-        parts = [doc.billing_address_1, doc.billing_address_2, doc.billing_address_3]
-    elif doc.shipping_address_1:
-        parts = [doc.shipping_address_1, doc.shipping_address_2, doc.shipping_address_3]
+    if doc.street_address_line_1_billing_address and doc.city_billing_address and doc.state_billing_address and doc.zip_code_billing_address and doc.country_billing_address:
+        parts = [doc.street_address_line_1_billing_address, doc.street_address_line_2_billing_address, doc.city_billing_address, doc.state_billing_address, doc.zip_code_billing_address, doc.country_billing_address]
+    elif doc.street_address_line_1_shipping_address and doc.city_shipping_address and doc.state_shipping_address and doc.zip_code_shipping_address and doc.country_shipping_address:
+        parts = [doc.street_address_line_1_shipping_address, doc.street_address_line_2_shipping_address, doc.city_shipping_address, doc.state_shipping_address, doc.zip_code_shipping_address, doc.country_shipping_address]
+
+    
+    for i in range(0, len(parts)):
+        print(f"Value {i} in parts is: {parts[i]}")
+    if len(parts) == 6:
+        cust.custom_street_address_line_1 = parts[0]
+        cust.custom_street_address_line_2 = parts[1]
+        cust.custom_city = parts[2]
+        cust.custom_state = parts[3]
+        cust.custom_zip_code = parts[4]
+        cust.custom_country = parts[5]
+    
 
 
-    new_billing_address = ', '.join(filter(None, parts)) if any(parts) else ''
 
-
-    # Only update if the current address is blank or different
-    if cust.custom_billing_address != new_billing_address:
-        cust.custom_billing_address = new_billing_address
-        cust.save(ignore_permissions=True)
 
 
 
 
 def set_customer_billing_from_organization(doc, method):
-    """When a Customer is updated, set billing address from linked organization — only if it's outdated."""
-    if not doc.custom_camp_link and not doc.custom_other_organization_link:
-        return
-
-
-    try:
-        if(doc.doctype == "Camp" and frappe.db.exists("Camp", {"name": doc.custom_camp_link})):
-            organization = frappe.get_doc("Camp", doc.custom_camp_link)
-        elif doc.doctype == "Other Organization" and frappe.db.exists("Other Organization", {"name": doc.custom_other_organization_link}):
-            organization = frappe.get_doc("Other Organization", doc.custom_other_organization_link)
-        else:
-            return
-    except frappe.DoesNotExistError:
-        return
-
-
-    parts = []
-    if organization.billing_address_1:
-        parts = [organization.billing_address_1, organization.billing_address_2, organization.billing_address_3]
-    elif organization.shipping_address_1:
-        parts = [organization.shipping_address_1, organization.shipping_address_2, organization.shipping_address_3]
-
-
-    new_billing_address = ', '.join(filter(None, parts)) if any(parts) else ''
-
-
-    # 🛡️ Only update if different
-    if doc.custom_billing_address != new_billing_address:
-        doc.custom_billing_address = new_billing_address
-
-
-
-
-
+    pass
