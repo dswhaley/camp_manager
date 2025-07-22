@@ -58,7 +58,7 @@ def update_camp(doc):
                 camp.tax_exempt = doc.exempt_status
             if camp.tax_exemption_number != doc.tax_exempt_id:
                 camp.tax_exemption_number = doc.tax_exempt_id
-            if camp.tax_exempt == "Taxed" or (camp.exempt_status == "Exempt" and camp.tax_exemption_number):
+            if camp.tax_exempt == "Taxed" or (camp.tax_exempt == "Exempt" and camp.tax_exemption_number):
                 doc.tax_exempt_id_gathered = 1
 
             # First Day of Camp
@@ -71,27 +71,54 @@ def update_camp(doc):
                 camp.association = doc.custom_discount
             if camp.association:
                 doc.custom_set_discount = 1
-
             # Shipping Address
-            if camp.shipping_address_1 != doc.shipping_address_1:
-                camp.shipping_address_1 = doc.shipping_address_1
-            if camp.shipping_address_2 != doc.shipping_address_2:
-                camp.shipping_address_2 = doc.shipping_address_2
-            if camp.shipping_address_3 != doc.shipping_address_3:
-                camp.shipping_address_3 = doc.shipping_address_3
-                update_currency(doc, camp)
+            if original.street_address_line_1_shipping_address != doc.street_address_line_1_shipping_address:
+                camp.street_address_line_1_shipping_address = doc.street_address_line_1_shipping_address
+            if original.street_address_line_2_shipping_address != doc.street_address_line_2_shipping_address:
+                camp.street_address_line_2_shipping_address = doc.street_address_line_2_shipping_address
+            if original.city_shipping_address != doc.city_shipping_address:
+                camp.city_shipping_address = doc.city_shipping_address
+            if original.state_shipping_address != doc.state_shipping_address:
+                camp.state_shipping_address = doc.state_shipping_address
+            if original.zip_code_shipping_address != doc.zip_code_shipping_address:
+                camp.zip_code_shipping_address = doc.zip_code_shipping_address
+            if original.country_shipping_address != doc.country_shipping_address:
+                camp.country_shipping_address = doc.country_shipping_address
 
             # Billing Address
-            if camp.billing_address_1 != doc.billing_address_1:
-                camp.billing_address_1 = doc.billing_address_1
-            if camp.billing_address_2 != doc.billing_address_2:
-                camp.billing_address_2 = doc.billing_address_2
-            if camp.billing_address_3 != doc.billing_address_3:
-                camp.billing_address_3 = doc.billing_address_3
+            if original.street_address_line_1_billing_address != doc.street_address_line_1_billing_address:
+                camp.street_address_line_1_billing_address = doc.street_address_line_1_billing_address
+            if original.street_address_line_2_billing_address != doc.street_address_line_2_billing_address:
+                camp.street_address_line_2_billing_address = doc.street_address_line_2_billing_address
+            if original.city_billing_address != doc.city_billing_address:
+                camp.city_billing_address = doc.city_billing_address
+            if original.state_billing_address != doc.state_billing_address:
+                camp.state_billing_address = doc.state_billing_address
+            if original.zip_code_billing_address != doc.zip_code_billing_address:
+                camp.zip_code_billing_address = doc.zip_code_billing_address
+            if original.country_billing_address != doc.country_billing_address:
+                camp.country_billing_address = doc.country_billing_address
+                
 
-            # Collected Address Flag
-            if ((doc.shipping_address_1 and doc.shipping_address_2) and
-                (doc.billing_address_1 and doc.billing_address_2 or doc.billing_address_same)):
+            
+            if (
+                doc.street_address_line_1_shipping_address and
+                doc.street_address_line_2_shipping_address and
+                doc.city_shipping_address and
+                doc.state_shipping_address and
+                doc.zip_code_shipping_address and
+                doc.country_shipping_address and
+                (
+                    doc.billing_address_same or (
+                        doc.street_address_line_1_billing_address and
+                        doc.street_address_line_2_billing_address and
+                        doc.city_billing_address and
+                        doc.state_billing_address and
+                        doc.zip_code_billing_address and
+                        doc.country_billing_address
+                    )
+                )
+            ):
                 doc.collected_address = 1
 
             # POC Info
@@ -130,12 +157,7 @@ def update_camp(doc):
 
             camp.save(ignore_permissions=True)
 
-            # if doc.shipping_address_1 and doc.shipping_address_2 and doc.exempt_status != "Pending" and doc.poc_email and doc.poc_phone_number:
-            #     if (doc.exempt_status == "Exempt" and doc.tax_exempt_id) or doc.exempt_status == "Taxed":
-            #         cust = frappe.get_doc("Customer", doc.name)
-            #         print("About to enqueue")
-            #         #cust.custom_create_customer_in_qbo = 1
-            #         frappe.enqueue("camp_manager.utils.sync_customer", queue='default', customer=cust.name)
+
 
 
         except frappe.DoesNotExistError:
@@ -144,11 +166,7 @@ def update_camp(doc):
     except Exception as e:
         frappe.msgprint(f"❌ Failed to update the Camp information for {doc.name}: {str(e)}")
         frappe.log_error(f"❌ Error updating Camp in Onboarding for {doc.name}: {str(e)}", "manage_onboarding error")
-def sync_customer(customer):
-    print("Running")
-    cust = frappe.get_doc("Customer", customer)
-    cust.custom_create_customer_in_qbo
-    cust.save(ignore_permissions=True)
+
 def update_organization(doc):
     try:
         if doc.is_new():
@@ -175,27 +193,53 @@ def update_organization(doc):
                 doc.custom_set_discount = 1
 
             # Shipping Address
-            if original.shipping_address_1 != doc.shipping_address_1:
-                other_organization.shipping_address_1 = doc.shipping_address_1
-            if original.shipping_address_2 != doc.shipping_address_2:
-                other_organization.shipping_address_2 = doc.shipping_address_2
-            if original.shipping_address_3 != doc.shipping_address_3:
-                other_organization.shipping_address_3 = doc.shipping_address_3
-                update_currency(doc, other_organization)
+            if original.street_address_line_1_shipping_address != doc.street_address_line_1_shipping_address:
+                other_organization.street_address_line_1_shipping_address = doc.street_address_line_1_shipping_address
+            if original.street_address_line_2_shipping_address != doc.street_address_line_2_shipping_address:
+                other_organization.street_address_line_2_shipping_address = doc.street_address_line_2_shipping_address
+            if original.city_shipping_address != doc.city_shipping_address:
+                other_organization.city_shipping_address = doc.city_shipping_address
+            if original.state_shipping_address != doc.state_shipping_address:
+                other_organization.state_shipping_address = doc.state_shipping_address
+            if original.zip_code_shipping_address != doc.zip_code_shipping_address:
+                other_organization.zip_code_shipping_address = doc.zip_code_shipping_address
+            if original.country_shipping_address != doc.country_shipping_address:
+                other_organization.country_shipping_address = doc.country_shipping_address
 
             # Billing Address
-            if original.billing_address_1 != doc.billing_address_1:
-                other_organization.billing_address_1 = doc.billing_address_1
-            if original.billing_address_2 != doc.billing_address_2:
-                other_organization.billing_address_2 = doc.billing_address_2
-            if original.billing_address_3 != doc.billing_address_3:
-                other_organization.billing_address_3 = doc.billing_address_3
+            if original.street_address_line_1_billing_address != doc.street_address_line_1_billing_address:
+                other_organization.street_address_line_1_billing_address = doc.street_address_line_1_billing_address
+            if original.street_address_line_2_billing_address != doc.street_address_line_2_billing_address:
+                other_organization.street_address_line_2_billing_address = doc.street_address_line_2_billing_address
+            if original.city_billing_address != doc.city_billing_address:
+                other_organization.city_billing_address = doc.city_billing_address
+            if original.state_billing_address != doc.state_billing_address:
+                other_organization.state_billing_address = doc.state_billing_address
+            if original.zip_code_billing_address != doc.zip_code_billing_address:
+                other_organization.zip_code_billing_address = doc.zip_code_billing_address
+            if original.country_billing_address != doc.country_billing_address:
+                other_organization.country_billing_address = doc.country_billing_address
+                
 
             
-            # Collected Address Flag
-            if ((doc.shipping_address_1 and doc.shipping_address_2) and
-                (doc.billing_address_1 and doc.billing_address_2 or doc.billing_address_same)):
+            if (
+                doc.street_address_line_1_shipping_address and
+                doc.city_shipping_address and
+                doc.state_shipping_address and
+                doc.zip_code_shipping_address and
+                doc.country_shipping_address and
+                (
+                    doc.billing_address_same or (
+                        doc.street_address_line_1_billing_address and
+                        doc.city_billing_address and
+                        doc.state_billing_address and
+                        doc.zip_code_billing_address and
+                        doc.country_billing_address
+                    )
+                )
+            ):
                 doc.collected_address = 1
+
 
             # POC Info
             if original.poc_name != doc.poc_name and doc.poc_name:
@@ -232,13 +276,6 @@ def update_organization(doc):
                 doc.set_up_parent_portal = 1
             other_organization.save(ignore_permissions=True)
 
-            # if doc.shipping_address_1 and doc.shipping_address_2 and doc.exempt_status != "Pending" and doc.poc_email and doc.poc_phone_number:
-            #     if (doc.exempt_status == "Exempt" and doc.tax_exempt_id) or doc.exempt_status == "Taxed":
-            #         cust = frappe.get_doc("Customer", doc.name)
-            #         print("About to enqueue")
-            #         #cust.custom_create_customer_in_qbo = 1
-            #         frappe.enqueue("camp_manager.utils.sync_customer", queue='default', customer=cust.name)
-
         except frappe.DoesNotExistError:
             frappe.throw(f"Linked Other Organization '{doc.title}' not found.")
 
@@ -246,15 +283,4 @@ def update_organization(doc):
         frappe.msgprint(f"❌ Failed to update the Other Organization information for {doc.name}")
         frappe.log_error(f"❌ Error updating Other Organization in Onboarding for {doc.name}: {str(e)}", "manage_onboarding error")
 
-def update_currency(doc, org):
-    print("***************************WE GOT HERE")
-    file_path = os.path.join(os.path.dirname(__file__), "country_currency_map.json")
-    with open(file_path, "r") as file:
-        country_currency = json.load(file)
-        country = doc.shipping_address_3.lower()
-        currency = country_currency.get(country.lower())
-        print(f"********************************Currency is: {currency}")
-        if currency:
-            org.currency = currency
-        else:
-            org.currency = "USD"        
+        
