@@ -195,13 +195,13 @@ def update_customer_billing_address(doc, cust):
 
     
     for i in range(0, len(parts)):
-    if len(parts) == 6:
-        cust.custom_street_address_line_1 = parts[0]
-        cust.custom_street_address_line_2 = parts[1]
-        cust.custom_city = parts[2]
-        cust.custom_state = parts[3]
-        cust.custom_zip_code = parts[4]
-        cust.custom_country = parts[5]
+        if len(parts) == 6:
+            cust.custom_street_address_line_1 = parts[0]
+            cust.custom_street_address_line_2 = parts[1]
+            cust.custom_city = parts[2]
+            cust.custom_state = parts[3]
+            cust.custom_zip_code = parts[4]
+            cust.custom_country = parts[5]
     
 
 
