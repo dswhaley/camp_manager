@@ -69,9 +69,6 @@ doc_events = {
         "on_update": "camp_manager.organization_hooks.organization_creation",
         "before_save": "camp_manager.utils.organization_hooks"
     },
-    "Customer": {
-        "before_save": "camp_manager.utils.set_customer_billing_from_organization"
-    },
      "Onboarding":{
          "before_save": "camp_manager.onboarding_hooks.manage_onboarding"
     }
