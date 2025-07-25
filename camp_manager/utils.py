@@ -20,12 +20,12 @@ def organization_hooks(doc, method):
         doc: The Frappe document being processed (Camp or Other Organization).
         method: The method triggering the hook (e.g., on_update, on_submit).
     """
-    check_currancy(doc)  # Ensure currency is set based on country_shipping_address field
+    if doc.country_shipping_address or doc.country_billing_address:
+        check_currancy(doc)  # Ensure currency is set based on country_shipping_address field
     set_discount(doc, method)  # Apply association discount if the association has changed
     if doc.doctype == "Camp":
         update_link_status(doc, method)  # Mark camp as linked if settings are present
     update_customer_info(doc, method)  # Sync all relevant customer info from organization/camp
-
 
 
 def check_currancy(doc):
@@ -88,25 +88,19 @@ def update_customer_info(doc, method):
         method: The method triggering the hook.
     """
     customers = []  # List to hold linked customers
+    cust = None
     if doc.doctype == "Camp":
         # Get all customers linked to this camp via custom_camp_link field
-        customers = frappe.get_all(
-            "Customer",
-            filters={"custom_camp_link": doc.name},
-            fields=["name"]
-        )
+        if frappe.db.exists("Customer", {"custom_camp_link": doc.name}):
+            cust = frappe.get_doc("Customer", {"custom_camp_link": doc.name})
     elif doc.doctype == "Other Organization":
         # Get all customers linked to this organization via custom_other_organization_link field
-        customers = frappe.get_all(
-            "Customer",
-            filters={"custom_other_organization_link": doc.name},
-            fields=["name"]
-        )
+        if frappe.db.exists("Customer", {"custom_other_organization_link": doc.name}):
+            cust = frappe.get_doc("Customer", {"custom_other_organization_link": doc.name})
     # If no customers found, nothing to update
-    if not customers:
+    if cust == None:
         return
-    for customer in customers:
-        cust = frappe.get_doc("Customer", customer.name)  # Fetch full customer document
+    try:
 
         # Update all relevant custom fields from organization/camp doc
         cust.custom_tax_status = doc.tax_exempt  # Sync tax exemption status
@@ -143,7 +137,11 @@ def update_customer_info(doc, method):
                 doc=doc,
                 cust=cust
             )
-
+    except Exception as e:
+        # Log and print errors for debugging and support
+        print(f"Failed to update customer info due to: {str(e)}")
+        frappe.log_error(frappe.get_traceback(), "Customer Info Update Error")
+        frappe.msgprint(f"Failed to update customer info: {str(e)}")
 
 
 
@@ -257,12 +255,12 @@ def set_discount(doc, method):
 
         original = None
         # Retrieve original document for comparison, to detect association changes
-        if not hasattr(doc, "_original"):
+        if not doc.is_new() and not hasattr(doc, "_original"):
             doc._original = frappe.get_doc(doc.doctype, doc.name)
             original = doc._original
 
         # If association changed or original is missing, update discount from JSON
-        if original == None or (original.association != doc.association and doc.association):
+        if original == None or (original.association != doc.association) and doc.association:
             file_path = os.path.join(os.path.dirname(__file__), "discounts.json")
 
             with open(file_path, "r") as file:
