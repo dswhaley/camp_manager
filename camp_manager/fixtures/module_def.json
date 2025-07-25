@@ -1,6 +1,17 @@
 [
  {
-  "app_name": "erpnext",
+  "app_name": "camp_manager",
+  "custom": 0,
+  "docstatus": 0,
+  "doctype": "Module Def",
+  "modified": "2025-06-27 20:44:37.326971",
+  "module_name": "Camp Manager",
+  "name": "Camp Manager",
+  "package": null,
+  "restrict_to_domain": null
+ },
+ {
+  "app_name": "camp_manager",
   "custom": 0,
   "docstatus": 0,
   "doctype": "Module Def",
