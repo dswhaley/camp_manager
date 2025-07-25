@@ -48,10 +48,14 @@ fixtures = [
         "filters": [["doc_type", "=", "Customer"]]
     },
     # Module definition for Camp
-    {
+ {
         "doctype": "Module Def",
-        "filters": [["module_name", "=", "Camp"]]
+        "filters": [["module_name", "in", [
+            "Camp Manager", 
+            "Camp"
+        ]]]
     },
+
     # Workspaces for navigation and dashboards
     {
         "doctype": "Workspace",
