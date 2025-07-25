@@ -1,0 +1,464 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "prompt",
+ "creation": "2025-07-03 16:38:18.057800",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "phase_1_camp_section",
+  "organization_type_column",
+  "organization_type",
+  "chose_service_package",
+  "selected_features",
+  "registration_identified",
+  "registration_method",
+  "tax_exempt_id_gathered",
+  "exempt_status",
+  "tax_exempt_id",
+  "first_day_of_camp_provided",
+  "first_day_of_camp",
+  "phase_2_funfangle_section",
+  "collected_address",
+  "street_address_line_1_shipping_address",
+  "street_address_line_2_shipping_address",
+  "city_shipping_address",
+  "state_shipping_address",
+  "zip_code_shipping_address",
+  "country_shipping_address",
+  "gathered_poc_information",
+  "poc_name",
+  "poc_email",
+  "poc_phone_number",
+  "account_setup",
+  "funfangle_username",
+  "funfangle_password",
+  "assigned_organization_order_id",
+  "organization_order_id",
+  "assigned_organization_funfangle_id",
+  "organization_funfangle_id",
+  "set_up_parent_portal",
+  "link_to_parent_portal",
+  "set_up_admin_console",
+  "sent_retail_training_guide_if_needed",
+  "column_break_xyto",
+  "billing_address_same",
+  "street_address_line_1_billing_address",
+  "street_address_line_2_billing_address",
+  "city_billing_address",
+  "state_billing_address",
+  "zip_code_billing_address",
+  "country_billing_address",
+  "phase_3_camp_section",
+  "completed_datasettings_form",
+  "downloaded_funfangle_apps",
+  "camp_set_up_software",
+  "logobranding_recieved",
+  "phase_4_section",
+  "wristband_and_scanner_order",
+  "phase_5_camp_section",
+  "inventory_setup",
+  "care_packages_setup_if_using",
+  "phase_6_funfangle_section",
+  "registration_synced",
+  "special_requirements_fulfilled",
+  "phase_7_camp_section",
+  "tested_parent_invitation",
+  "go_live_section",
+  "live",
+  "title"
+ ],
+ "fields": [
+  {
+   "fieldname": "phase_1_camp_section",
+   "fieldtype": "Section Break",
+   "label": "Phase 1 (Camp)"
+  },
+  {
+   "default": "0",
+   "fieldname": "registration_identified",
+   "fieldtype": "Check",
+   "label": "Registration Identified"
+  },
+  {
+   "depends_on": "eval:!doc.registration_method",
+   "fieldname": "registration_method",
+   "fieldtype": "Data",
+   "label": "Registration Method"
+  },
+  {
+   "default": "0",
+   "fieldname": "tax_exempt_id_gathered",
+   "fieldtype": "Check",
+   "label": "Tax Information Provided"
+  },
+  {
+   "bold": 1,
+   "default": "Pending",
+   "depends_on": "eval:!doc.tax_exempt_id_gathered",
+   "fieldname": "exempt_status",
+   "fieldtype": "Select",
+   "label": "Exempt Status",
+   "options": "Exempt\nTaxed\nPending"
+  },
+  {
+   "bold": 1,
+   "depends_on": "eval:!doc.tax_exempt_id_gathered",
+   "fieldname": "tax_exempt_id",
+   "fieldtype": "Data",
+   "label": "Tax Exempt ID"
+  },
+  {
+   "default": "0",
+   "fieldname": "first_day_of_camp_provided",
+   "fieldtype": "Check",
+   "label": "First Day of Camp Provided"
+  },
+  {
+   "depends_on": "eval:!doc.first_day_of_camp_provided",
+   "fieldname": "first_day_of_camp",
+   "fieldtype": "Date",
+   "label": "First Day of Camp"
+  },
+  {
+   "fieldname": "phase_2_funfangle_section",
+   "fieldtype": "Section Break",
+   "label": "Phase 2 (Funfangle)"
+  },
+  {
+   "default": "0",
+   "fieldname": "collected_address",
+   "fieldtype": "Check",
+   "label": "Collected Address"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.collected_address",
+   "fieldname": "billing_address_same",
+   "fieldtype": "Check",
+   "label": "Billing Address Same"
+  },
+  {
+   "default": "0",
+   "fieldname": "account_setup",
+   "fieldtype": "Check",
+   "label": "Account Setup"
+  },
+  {
+   "default": "0",
+   "fieldname": "set_up_parent_portal",
+   "fieldtype": "Check",
+   "label": "Set up Parent Portal"
+  },
+  {
+   "default": "0",
+   "fieldname": "set_up_admin_console",
+   "fieldtype": "Check",
+   "label": "Set up Admin Console"
+  },
+  {
+   "default": "0",
+   "fieldname": "sent_retail_training_guide_if_needed",
+   "fieldtype": "Check",
+   "label": "Sent Retail Training Guide (if needed)"
+  },
+  {
+   "depends_on": "eval:!doc.gathered_poc_information",
+   "fieldname": "poc_email",
+   "fieldtype": "Data",
+   "label": "POC email"
+  },
+  {
+   "default": "0",
+   "fieldname": "gathered_poc_information",
+   "fieldtype": "Check",
+   "label": "Gathered POC information"
+  },
+  {
+   "depends_on": "eval:!doc.gathered_poc_information",
+   "fieldname": "poc_name",
+   "fieldtype": "Data",
+   "label": "POC Name"
+  },
+  {
+   "depends_on": "eval:!doc.gathered_poc_information",
+   "fieldname": "poc_phone_number",
+   "fieldtype": "Data",
+   "label": "POC Phone Number"
+  },
+  {
+   "fieldname": "phase_3_camp_section",
+   "fieldtype": "Section Break",
+   "label": "Phase 3 (Camp)"
+  },
+  {
+   "default": "0",
+   "fieldname": "camp_set_up_software",
+   "fieldtype": "Check",
+   "label": "Camp Set up Software"
+  },
+  {
+   "default": "0",
+   "fieldname": "logobranding_recieved",
+   "fieldtype": "Check",
+   "label": "Logo/Branding Recieved"
+  },
+  {
+   "fieldname": "phase_4_section",
+   "fieldtype": "Section Break",
+   "label": "Phase 4 (Funfangle)"
+  },
+  {
+   "fieldname": "wristband_and_scanner_order",
+   "fieldtype": "Link",
+   "label": "Wristband and Scanner Order",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "phase_5_camp_section",
+   "fieldtype": "Section Break",
+   "label": "Phase 5 (Camp)"
+  },
+  {
+   "default": "0",
+   "fieldname": "inventory_setup",
+   "fieldtype": "Check",
+   "label": "Inventory Setup"
+  },
+  {
+   "default": "0",
+   "fieldname": "care_packages_setup_if_using",
+   "fieldtype": "Check",
+   "label": "Care Packages Setup (If using)"
+  },
+  {
+   "fieldname": "phase_6_funfangle_section",
+   "fieldtype": "Section Break",
+   "label": "Phase 6 (FunFangle)"
+  },
+  {
+   "default": "0",
+   "fieldname": "registration_synced",
+   "fieldtype": "Check",
+   "label": "Registration Synced"
+  },
+  {
+   "default": "0",
+   "fieldname": "special_requirements_fulfilled",
+   "fieldtype": "Check",
+   "label": "Special Requirements Fulfilled"
+  },
+  {
+   "fieldname": "phase_7_camp_section",
+   "fieldtype": "Section Break",
+   "label": "Phase 7 (Camp)"
+  },
+  {
+   "default": "0",
+   "fieldname": "tested_parent_invitation",
+   "fieldtype": "Check",
+   "label": "Tested Parent Invitation"
+  },
+  {
+   "fieldname": "go_live_section",
+   "fieldtype": "Section Break",
+   "label": "Go Live"
+  },
+  {
+   "default": "0",
+   "fieldname": "live",
+   "fieldtype": "Check",
+   "label": "Live"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "title"
+  },
+  {
+   "default": "0",
+   "fieldname": "chose_service_package",
+   "fieldtype": "Check",
+   "label": "Chose Service Package"
+  },
+  {
+   "default": "0",
+   "fieldname": "selected_features",
+   "fieldtype": "Check",
+   "label": "Selected Features"
+  },
+  {
+   "default": "0",
+   "fieldname": "completed_datasettings_form",
+   "fieldtype": "Check",
+   "label": "Completed Data/Settings form"
+  },
+  {
+   "default": "0",
+   "fieldname": "downloaded_funfangle_apps",
+   "fieldtype": "Check",
+   "label": "Downloaded Funfangle apps"
+  },
+  {
+   "default": "Camp",
+   "fieldname": "organization_type_column",
+   "fieldtype": "Column Break",
+   "label": "Organization Type",
+   "options": "Camp\nOther Organization"
+  },
+  {
+   "default": "Camp",
+   "fieldname": "organization_type",
+   "fieldtype": "Select",
+   "label": "Organization Type",
+   "options": "Camp\nOther Organization"
+  },
+  {
+   "default": "0",
+   "fieldname": "assigned_organization_order_id",
+   "fieldtype": "Check",
+   "label": "Assigned Organization Order ID"
+  },
+  {
+   "depends_on": "eval:!doc.assign_organization_id",
+   "fieldname": "organization_order_id",
+   "fieldtype": "Data",
+   "label": "Organization Order ID"
+  },
+  {
+   "default": "0",
+   "fieldname": "assigned_organization_funfangle_id",
+   "fieldtype": "Check",
+   "label": "Assigned Organization Funfangle ID"
+  },
+  {
+   "fieldname": "column_break_xyto",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:!doc.assigned_organization_funfangle_id",
+   "fieldname": "organization_funfangle_id",
+   "fieldtype": "Data",
+   "label": "Organization Funfangle ID"
+  },
+  {
+   "depends_on": "eval:!doc.set_up_parent_portal",
+   "fieldname": "link_to_parent_portal",
+   "fieldtype": "Data",
+   "label": "Link to Parent Portal",
+   "options": "URL"
+  },
+  {
+   "depends_on": "eval:!doc.account_setup",
+   "fieldname": "funfangle_username",
+   "fieldtype": "Data",
+   "label": "Funfangle Username"
+  },
+  {
+   "depends_on": "eval:!doc.account_setup",
+   "fieldname": "funfangle_password",
+   "fieldtype": "Data",
+   "label": "Funfangle Password"
+  },
+  {
+   "depends_on": "eval:!doc.collected_address",
+   "fieldname": "street_address_line_1_shipping_address",
+   "fieldtype": "Data",
+   "label": "Street Address Line 1 (Shipping Address)"
+  },
+  {
+   "depends_on": "eval:!doc.collected_address",
+   "fieldname": "street_address_line_2_shipping_address",
+   "fieldtype": "Data",
+   "label": "Street Address Line 2 (Shipping Address)"
+  },
+  {
+   "depends_on": "eval:!doc.collected_address",
+   "fieldname": "city_shipping_address",
+   "fieldtype": "Data",
+   "label": "City (Shipping Address)"
+  },
+  {
+   "depends_on": "eval:!doc.collected_address",
+   "fieldname": "state_shipping_address",
+   "fieldtype": "Data",
+   "label": "State (Shipping Address)"
+  },
+  {
+   "depends_on": "eval:!doc.collected_address",
+   "fieldname": "zip_code_shipping_address",
+   "fieldtype": "Data",
+   "label": "Zip Code (Shipping Address)"
+  },
+  {
+   "depends_on": "eval:!doc.collected_address",
+   "fieldname": "country_shipping_address",
+   "fieldtype": "Data",
+   "label": "Country (Shipping Address)"
+  },
+  {
+   "depends_on": "eval:!doc.billing_address_different",
+   "fieldname": "street_address_line_1_billing_address",
+   "fieldtype": "Data",
+   "label": "Street Address Line 1 (Billing Address)"
+  },
+  {
+   "depends_on": "eval:!doc.billing_address_different",
+   "fieldname": "street_address_line_2_billing_address",
+   "fieldtype": "Data",
+   "label": "Street Address Line 2 (Billing Address)"
+  },
+  {
+   "depends_on": "eval:!doc.billing_address_different",
+   "fieldname": "city_billing_address",
+   "fieldtype": "Data",
+   "label": "City (Billing Address)"
+  },
+  {
+   "depends_on": "eval:!doc.billing_address_different",
+   "fieldname": "state_billing_address",
+   "fieldtype": "Data",
+   "label": "State (Billing Address)"
+  },
+  {
+   "depends_on": "eval:!doc.billing_address_different",
+   "fieldname": "zip_code_billing_address",
+   "fieldtype": "Data",
+   "label": "Zip Code (Billing Address)"
+  },
+  {
+   "depends_on": "eval:!doc.billing_address_different",
+   "fieldname": "country_billing_address",
+   "fieldtype": "Data",
+   "label": "Country (Billing Address)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-21 15:46:11.290096",
+ "modified_by": "Administrator",
+ "module": "Camp",
+ "name": "Onboarding",
+ "naming_rule": "Set by user",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

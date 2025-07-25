@@ -1,0 +1,379 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:organization_name",
+ "creation": "2025-07-03 16:38:18.378306",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "organization_section",
+  "organization_name",
+  "website",
+  "column_break_okjx",
+  "organization_logo",
+  "person_of_contact_section",
+  "contact_picture",
+  "contact_name",
+  "role",
+  "column_break_kmnd",
+  "email",
+  "phone",
+  "office_phone",
+  "key_information_section",
+  "features",
+  "wristbands",
+  "column_break_jljy",
+  "timezone",
+  "address_section",
+  "street_address_line_1_shipping_address",
+  "street_address_line_2_shipping_address",
+  "city_shipping_address",
+  "state_shipping_address",
+  "zip_code_shipping_address",
+  "country_shipping_address",
+  "column_break_kqel",
+  "street_address_line_1_billing_address",
+  "street_address_line_2_billing_address",
+  "city_billing_address",
+  "state_billing_address",
+  "zip_code_billing_address",
+  "country_billing_address",
+  "payment_info_section",
+  "association_discount",
+  "negotiated_wristband",
+  "negotiated_wristband_price",
+  "column_break_tzcj",
+  "association",
+  "negotiated_regular_account",
+  "negotiated_regular_account_price",
+  "negotiated_staff_account",
+  "negotiated_staff_account_price",
+  "funfangle_account_information_section",
+  "funfangle_username",
+  "funfangle_password",
+  "link_to_parent_portal",
+  "other_important_information_section",
+  "organization_order_id",
+  "organization_funfangle_id",
+  "currency",
+  "lead_link",
+  "column_break_bjdi",
+  "tax_exemption_number",
+  "tax_exempt",
+  "customer_and_onboarding_created"
+ ],
+ "fields": [
+  {
+   "fieldname": "organization_section",
+   "fieldtype": "Section Break",
+   "label": "Organization "
+  },
+  {
+   "fieldname": "organization_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Organization Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_okjx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "website",
+   "fieldtype": "Data",
+   "label": "Website",
+   "options": "URL"
+  },
+  {
+   "fieldname": "organization_logo",
+   "fieldtype": "Attach",
+   "label": "Organization Logo"
+  },
+  {
+   "fieldname": "person_of_contact_section",
+   "fieldtype": "Section Break",
+   "label": "Person of Contact"
+  },
+  {
+   "fieldname": "contact_picture",
+   "fieldtype": "Attach",
+   "label": "Contact Picture"
+  },
+  {
+   "fieldname": "contact_name",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "column_break_kmnd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Cell Phone"
+  },
+  {
+   "fieldname": "role",
+   "fieldtype": "Data",
+   "label": "Role"
+  },
+  {
+   "fieldname": "office_phone",
+   "fieldtype": "Data",
+   "label": "Office Phone"
+  },
+  {
+   "fieldname": "key_information_section",
+   "fieldtype": "Section Break",
+   "label": "Key Information"
+  },
+  {
+   "fieldname": "features",
+   "fieldtype": "Data",
+   "label": "Features"
+  },
+  {
+   "fieldname": "wristbands",
+   "fieldtype": "Data",
+   "label": "Wristbands"
+  },
+  {
+   "fieldname": "column_break_jljy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "timezone",
+   "fieldtype": "Data",
+   "label": "Timezone"
+  },
+  {
+   "fieldname": "address_section",
+   "fieldtype": "Section Break",
+   "label": "Address"
+  },
+  {
+   "fieldname": "column_break_kqel",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payment_info_section",
+   "fieldtype": "Section Break",
+   "label": "Payment Info"
+  },
+  {
+   "fieldname": "association_discount",
+   "fieldtype": "Data",
+   "label": "Association Discount"
+  },
+  {
+   "fieldname": "column_break_tzcj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "association",
+   "fieldtype": "Select",
+   "label": "Association",
+   "options": "\nACA\nBSA\nCCCA\nLOM\nPCCCA\nSBC\nJCC\nOCA\nYMCA\nCCL\nAOG"
+  },
+  {
+   "fieldname": "negotiated_wristband",
+   "fieldtype": "Link",
+   "label": "Negotiated Wristband",
+   "options": "Item"
+  },
+  {
+   "fieldname": "negotiated_wristband_price",
+   "fieldtype": "Data",
+   "label": "Negotiated Wristband Price"
+  },
+  {
+   "fieldname": "negotiated_regular_account",
+   "fieldtype": "Link",
+   "label": "Negotiated Regular Account",
+   "options": "Item"
+  },
+  {
+   "fieldname": "negotiated_regular_account_price",
+   "fieldtype": "Data",
+   "label": "Negotiated Regular Account Price"
+  },
+  {
+   "fieldname": "negotiated_staff_account",
+   "fieldtype": "Link",
+   "label": "Negotiated Staff Account",
+   "options": "Item"
+  },
+  {
+   "fieldname": "negotiated_staff_account_price",
+   "fieldtype": "Data",
+   "label": "Negotiated Staff Account Price"
+  },
+  {
+   "fieldname": "other_important_information_section",
+   "fieldtype": "Section Break",
+   "label": "Other Important Information"
+  },
+  {
+   "fieldname": "organization_order_id",
+   "fieldtype": "Data",
+   "label": "Organization Order ID"
+  },
+  {
+   "fieldname": "organization_funfangle_id",
+   "fieldtype": "Data",
+   "label": "Organization FunFangle ID"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "column_break_bjdi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tax_exemption_number",
+   "fieldtype": "Data",
+   "label": "Tax Exemption Number"
+  },
+  {
+   "default": "Pending",
+   "fieldname": "tax_exempt",
+   "fieldtype": "Select",
+   "label": "Tax Status",
+   "options": "Exempt\nTaxed\nPending"
+  },
+  {
+   "fieldname": "lead_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Lead Link",
+   "options": "Lead"
+  },
+  {
+   "default": "0",
+   "fieldname": "customer_and_onboarding_created",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "customer and onboarding created"
+  },
+  {
+   "fieldname": "funfangle_account_information_section",
+   "fieldtype": "Section Break",
+   "label": "Funfangle Account Information"
+  },
+  {
+   "fieldname": "funfangle_username",
+   "fieldtype": "Data",
+   "label": "Funfangle Username"
+  },
+  {
+   "fieldname": "funfangle_password",
+   "fieldtype": "Data",
+   "label": "Funfangle Password"
+  },
+  {
+   "fieldname": "link_to_parent_portal",
+   "fieldtype": "Data",
+   "label": "Link to Parent Portal",
+   "options": "URL"
+  },
+  {
+   "fieldname": "street_address_line_1_shipping_address",
+   "fieldtype": "Data",
+   "label": "Street Address Line 1 (Shipping Address)"
+  },
+  {
+   "fieldname": "street_address_line_2_shipping_address",
+   "fieldtype": "Data",
+   "label": "Street Address Line 2 (Shipping Address)"
+  },
+  {
+   "fieldname": "city_shipping_address",
+   "fieldtype": "Data",
+   "label": "City (Shipping Address)"
+  },
+  {
+   "fieldname": "state_shipping_address",
+   "fieldtype": "Data",
+   "label": "State (Shipping Address)"
+  },
+  {
+   "fieldname": "zip_code_shipping_address",
+   "fieldtype": "Data",
+   "label": "Zip Code (Shipping Address)"
+  },
+  {
+   "fieldname": "country_shipping_address",
+   "fieldtype": "Data",
+   "label": "Country (Shipping Address)"
+  },
+  {
+   "fieldname": "street_address_line_1_billing_address",
+   "fieldtype": "Data",
+   "label": "Street Address Line 1 (Billing Address)"
+  },
+  {
+   "fieldname": "street_address_line_2_billing_address",
+   "fieldtype": "Data",
+   "label": "Street Address Line 2 (Billing Address)"
+  },
+  {
+   "fieldname": "city_billing_address",
+   "fieldtype": "Data",
+   "label": "City (Billing Address)"
+  },
+  {
+   "fieldname": "state_billing_address",
+   "fieldtype": "Data",
+   "label": "State (Billing Address)"
+  },
+  {
+   "fieldname": "zip_code_billing_address",
+   "fieldtype": "Data",
+   "label": "Zip Code (Billing Address)"
+  },
+  {
+   "fieldname": "country_billing_address",
+   "fieldtype": "Data",
+   "label": "Country (Billing Address)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-21 15:32:31.143464",
+ "modified_by": "Administrator",
+ "module": "Camp",
+ "name": "Other Organization",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
