@@ -3765,7 +3765,7 @@
   "max_attachments": 0,
   "migration_hash": "3cec183896618434ac874c0da56bf527",
   "modified": "2025-07-21 15:46:11.290096",
-  "module": "Bulk Transaction",
+  "module": "Camp",
   "name": "Onboarding",
   "naming_rule": "Set by user",
   "nsm_parent_field": null,
