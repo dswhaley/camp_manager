@@ -11,11 +11,11 @@
   "restrict_to_domain": null
  },
  {
-  "app_name": "camp_manager",
+  "app_name": "erpnext",
   "custom": 0,
   "docstatus": 0,
   "doctype": "Module Def",
-  "modified": "2025-06-17 09:06:45.724187",
+  "modified": "2025-07-28 17:33:44.679287",
   "module_name": "Camp",
   "name": "Camp",
   "package": null,
