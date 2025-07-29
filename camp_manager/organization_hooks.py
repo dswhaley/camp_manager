@@ -45,6 +45,7 @@ def organization_creation(doc, method):
                 onboarding.name = doc.organization_name  # Set onboarding name
                 onboarding.title = doc.organization_name  # Set onboarding title
                 onboarding.organization_type = doc.doctype  # Set type (Camp or Other Organization)
+                onboarding.custom_customer_link = customer.name if customer else None  # Link to Customer if created
                 # For non-Camp organizations, mark onboarding steps as completed
                 if doc.doctype != "Camp":
                     onboarding.registration_identified = 1  # Mark registration as identified
