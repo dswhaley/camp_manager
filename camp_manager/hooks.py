@@ -69,6 +69,8 @@ override_whitelisted_methods = {
 
 
 
+after_install = "camp_manager.hide_workspaces.hide_erpnext_workspaces"
+
 # doc_events map document events (like on_update, before_save) to Python functions
 # This is the heart of the app's business logic integration with ERPNext
 doc_events = {
