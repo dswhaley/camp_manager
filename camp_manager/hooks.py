@@ -21,7 +21,7 @@ fixtures = [
     # Custom fields for Lead and Customer doctypes
     {
         "dt": "Custom Field",
-        "filters": [["dt", "=", "Lead"]]
+        "filters": [["dt", "in", ["Lead", "Onboarding", "Customer"]]]
     },
     {
         "dt": "Property Setter",
@@ -38,10 +38,6 @@ fixtures = [
     {
         "dt": "Print Format",
         "filters": [["doc_type", "=", "Lead"]]
-    },
-    {
-        "doctype": "Custom Field",
-        "filters": [["dt", "=", "Customer"]]
     },
     {
         "doctype": "Property Setter",
