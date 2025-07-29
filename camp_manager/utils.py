@@ -109,7 +109,7 @@ def update_customer_info(doc, method):
         update_customer_billing_address(doc, cust)  # Update billing address fields
         cust.custom_email = doc.email  # Sync email
         cust.custom_phone = doc.phone  # Sync phone number
-        cust.save(ignore_permissions=True)  # Save changes to customer
+        cust.save(ignore_permissions=True)  # Save customer document with updated info
 
         # If the currency has changed, update customer currency and ensure account exists
         if cust.default_currency != doc.currency:
@@ -122,20 +122,18 @@ def update_customer_info(doc, method):
             company_name = first_company[0]["name"] if first_company else None
             # Set default currency for customer in DB
             frappe.db.set_value("Customer", cust.name, "default_currency", doc.currency)
-            # Ensure a child account exists for this currency
             ensure_child_account(f"Debtors {doc.currency}", doc.currency)
 
             # Enqueue async update for customer account to avoid blocking
             frappe.enqueue(
-                "camp_manager.utils.set_customer_account",
+                method=set_customer_account,
                 queue='default',
                 timeout=300,
-                now=False,
                 is_async=True,
                 company=company_name,
-                account_name=f"Debtors {doc.currency} - {company_name[0]}",
+                account_name=f"Debtors {doc.currency}",
                 doc=doc,
-                cust=cust
+                cust_name=cust.name
             )
     except Exception as e:
         # Log and print errors for debugging and support
@@ -145,7 +143,7 @@ def update_customer_info(doc, method):
 
 
 
-def set_customer_account(company, account_name, doc, cust):
+def set_customer_account(company, account_name, doc, cust_name):
     """
     Appends a new account to the customer's accounts child table, linking the customer to the correct receivable account.
     This is important for proper financial tracking and reporting in ERPNext, especially for multi-currency setups.
@@ -156,12 +154,12 @@ def set_customer_account(company, account_name, doc, cust):
         cust: The customer document to update.
     """
     # Add account entry to customer, linking to the correct company and account
+    cust = frappe.get_doc("Customer", cust_name)  # Fetch the customer document
     cust.append("accounts", {
         "company": company,
-        "account": f"Debtors {doc.currency} - {company_name[0]}"
+        "account": f"Debtors {doc.currency} - {company[0]}"
     })
-    cust.save(ignore_permissions=True)  # Save changes to customer document
-
+    cust.save(ignore_permissions=True)  # Save customer with updated accounts
 
 
 def ensure_child_account(account_name: str, currency: str):
